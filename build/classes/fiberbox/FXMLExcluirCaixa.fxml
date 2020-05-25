@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="300.0" style="-fx-background-color: black; -fx-background-radius: 5; -fx-border-radius: 5;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fiberbox.FXMLExcluirCaixaController">
+   <children>
+      <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label fx:id="txtExcluir" text="EXCLUIR: ?" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <TextField fx:id="txtCodigo" editable="false" promptText="CODIGO">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="txtPpoe1" editable="false" layoutX="15.0" layoutY="50.0" promptText="PPOE 1">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="txtPpoe2" editable="false" layoutX="15.0" layoutY="122.0" promptText="PPOE 2">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="txtPpoe3" editable="false" layoutX="15.0" layoutY="164.0" promptText="PPOE 3">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="txtPpoe4" editable="false" layoutX="15.0" layoutY="206.0" promptText="PPOE 4">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="txtPpoe5" editable="false" layoutX="15.0" layoutY="248.0" promptText="PPOE 5">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="txtPpoe6" editable="false" layoutX="15.0" layoutY="290.0" promptText="PPOE 6">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="txtPpoe7" editable="false" layoutX="15.0" layoutY="332.0" promptText="PPOE 7">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="txtPpoe8" editable="false" layoutX="15.0" layoutY="374.0" promptText="PPOE 8">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </TextField>
+            <TextArea fx:id="txtLocalizacao" editable="false" prefHeight="200.0" prefWidth="200.0" promptText="Localização" wrapText="true">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </TextArea>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+               <children>
+                  <TextField fx:id="txtX" alignment="CENTER" editable="false" promptText="X">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </TextField>
+                  <TextField fx:id="txtY" alignment="CENTER" editable="false" layoutX="10.0" layoutY="10.0" promptText="Y">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" spacing="5.0">
+               <children>
+                  <Button fx:id="btnExcluir" mnemonicParsing="false" text="Excluir">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="btnCancelar" layoutX="119.0" layoutY="10.0" mnemonicParsing="false" text="Cancelar">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </VBox>
+   </children>
+</AnchorPane>
