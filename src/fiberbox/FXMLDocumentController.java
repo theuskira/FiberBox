@@ -549,12 +549,11 @@ public class FXMLDocumentController implements Initializable {
 
                     }
 
-                    for (Caixa c : Estatico.getListaCaixas()) {
-
+                    Estatico.getListaCaixas().stream().map((c) -> {
+                        
                         Circle circle = new Circle();
-
                         boolean caixaOn = false;
-
+                        
                         for (Map<String, String> entry : usuarios) {
 
                             if (entry.containsValue("<pppoe-" + c.getUsuario1() + ">")) {
@@ -583,21 +582,21 @@ public class FXMLDocumentController implements Initializable {
                             }
 
                         }
-
+                        
                         if (caixaOn) {
                             circle.setFill(Paint.valueOf("BLUE"));
-                            c.setOnline(true);
-                            Estatico.setListaCaixasOn(c);
+                            //c.setOnline(true);
+                            //Estatico.setListaCaixasOn(c);
                         } else {
                             circle.setFill(Paint.valueOf("RED"));
-                            c.setOnline(false);
-                            Estatico.setListaCaixasOff(c);
+                            //c.setOnline(false);
+                            //Estatico.setListaCaixasOff(c);
                         }
-
+                        
                         circle.setCenterX(c.getX());
                         circle.setCenterY(c.getY());
                         circle.setRadius(10.0f);
-
+                        
                         circle.setOnMouseClicked((javafx.scene.input.MouseEvent event) -> {
                             String usuarios1 = "";
                             if (c.getUsuario1() != null && !c.getUsuario1().isEmpty()) {
@@ -630,7 +629,7 @@ public class FXMLDocumentController implements Initializable {
                                     + "\n" + usuarios1
                                     + "\n" + "LOCALIZACAO\n"
                                     + c.getEndereco() + "\n"
-                                    + "X: " + c.getX()
+                                            + "X: " + c.getX()
                                     + " - Y: " + c.getY());
 
                             if (event.getButton().equals(MouseButton.PRIMARY)) {
@@ -647,12 +646,12 @@ public class FXMLDocumentController implements Initializable {
                             }
 
                         });
-
+                        return circle;
+                    }).forEachOrdered((circle) -> {
                         apMap1.getChildren().add(
                                 circle
                         );
-
-                    }
+                    });
                 }
 
                 //conectar();
