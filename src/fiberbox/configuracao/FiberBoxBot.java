@@ -28,13 +28,17 @@ public class FiberBoxBot extends TelegramLongPollingBot{
             switch(command){
                 case "/start":
                     
-                    message.setText("<b>COMANDOS DISPONÍVEIS</b>\n" +
-                                "/status - Status do Sistema\n" +
-                                "/caixas_on - Número de Caixas On\n" +
-                                "/caixas_off - Número de Caixas Off\n" +
-                                "/total_usuarios - Total de Usuários\n" +
-                                "/listar_caixas_off - Listar Caixas Off\n" +
-                                "/listar_caixas_on - Listar Caixas On");
+                    message.setText("<b>Status do Sistema</b>\n" +
+                            "Total de Usuários: <b>" + Estatico.getTotalUsuarios() + "</b>\n" +
+                            "Caixas On-Line: <b>" + Estatico.getCaixasOn()+ "</b>\n" +
+                            "Caixas Off-Line: <b>" + Estatico.getCaixasOff()+ "</b>\n\n" +
+                            "<b>COMANDOS DISPONÍVEIS</b>\n" +
+                            "/status - Status do Sistema\n" +
+                            "/caixas_on - Número de Caixas On\n" +
+                            "/caixas_off - Número de Caixas Off\n" +
+                            "/total_usuarios - Total de Usuários\n" +
+                            "/listar_caixas_off - Listar Caixas Off\n" +
+                            "/listar_caixas_on - Listar Caixas On");
                     break;
                     
                 case "/status":
@@ -152,6 +156,19 @@ public class FiberBoxBot extends TelegramLongPollingBot{
                     message.setText(listaCaixasOn);
                     
                     break;
+                    
+                default:
+                    
+                    message.setText("<b>COMANDOS DISPONÍVEIS</b>\n" +
+                            "/status - Status do Sistema\n" +
+                            "/caixas_on - Número de Caixas On\n" +
+                            "/caixas_off - Número de Caixas Off\n" +
+                            "/total_usuarios - Total de Usuários\n" +
+                            "/listar_caixas_off - Listar Caixas Off\n" +
+                            "/listar_caixas_on - Listar Caixas On");
+                    
+                    break;
+                        
                     
             }
             
