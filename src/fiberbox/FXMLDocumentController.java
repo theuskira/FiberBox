@@ -21,6 +21,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -235,7 +236,8 @@ public class FXMLDocumentController implements Initializable {
                         try {
                             
                             conectar();
-                            Thread.sleep(3000);
+                            
+                            Thread.sleep(5000);
                             
                         } catch (InterruptedException ex) {
                             
@@ -439,6 +441,9 @@ public class FXMLDocumentController implements Initializable {
         Estatico.setCaixasOn(caixasOnline);
         Estatico.setCaixasOff(caixasOff);
         Estatico.setCaixasEncontradas(caixasEncontradas);
+        
+        //animationTimer.start();
+        //animationTimer.stop();
 
         //atualizacao(null);
     }
@@ -498,173 +503,181 @@ public class FXMLDocumentController implements Initializable {
     AnimationTimer animationTimer = new AnimationTimer() {
         @Override
         public void handle(long currentNanoTime) {
-
-            try {
-
-                //System.out.println("** ATUALIZANDO GUI");
+            
+            if (currentNanoTime - 500 > 1_000_000_000) {
                 
-                if(usuarios != null){
-                    
-                    System.out.println("USUARIOS NAO NULOS");
-                    
-                    txtTotalUsuarios.setText(String.valueOf(usuarios.size()));
+                try {
 
-                    txtCaixasOn.setText(String.valueOf(Estatico.getCaixasOn()));
+                    //System.out.println("** ATUALIZANDO GUI");
 
-                    System.out.println("CAIXAS ON: " + Estatico.getCaixasOn());
+                    if(usuarios != null){
 
-                    txtCaixasOff.setText(String.valueOf(Estatico.getCaixasOff()));
-                    System.out.println("CAIXAS OFF: " + Estatico.getCaixasOff());
+                        System.out.println("USUARIOS NAO NULOS");
 
-                    txtSistema.setText(Estatico.getCaixasEncontradas() + " caixa(s) encontradas!");
-                    txtSistema.setStyle("-fx-background-color: white;"
-                            + " -fx-text-fill: black;"
-                            + " -fx-font-style: regular;"
-                            + " -fx-text-alignment: left;"
-                            + " -fx-background-radius: 5;");
+                        txtTotalUsuarios.setText(String.valueOf(usuarios.size()));
 
-                    if (Estatico.getCaixasOff() > 0) {
+                        txtCaixasOn.setText(String.valueOf(Estatico.getCaixasOn()));
 
-                        txtCaixasOff.setStyle("-fx-background-color: black;"
-                                + " -fx-text-fill: red;"
-                                + " -fx-background-radius: 5");
+                        System.out.println("CAIXAS ON: " + Estatico.getCaixasOn());
 
-                        txtSistema.setText("CAIXA(S) OFF\n" + String.valueOf(Estatico.getCaixasOff()));
+                        txtCaixasOff.setText(String.valueOf(Estatico.getCaixasOff()));
+                        System.out.println("CAIXAS OFF: " + Estatico.getCaixasOff());
 
-                            txtSistema.setStyle("-fx-background-color: white;"
+                        txtSistema.setText(Estatico.getCaixasEncontradas() + " caixa(s) encontradas!");
+                        txtSistema.setStyle("-fx-background-color: white;"
+                                + " -fx-text-fill: black;"
+                                + " -fx-font-style: regular;"
+                                + " -fx-text-alignment: left;"
+                                + " -fx-background-radius: 5;");
+
+                        if (Estatico.getCaixasOff() > 0) {
+
+                            txtCaixasOff.setStyle("-fx-background-color: black;"
                                     + " -fx-text-fill: red;"
-                                    + " -fx-font-style: bold;"
-                                    + " -fx-text-alignment: center;"
-                                    + " -fx-background-radius: 5;");
+                                    + " -fx-background-radius: 5");
 
-                            player.play();
+                            txtSistema.setText("CAIXA(S) OFF\n" + String.valueOf(Estatico.getCaixasOff()));
 
-                    } else {
+                                txtSistema.setStyle("-fx-background-color: white;"
+                                        + " -fx-text-fill: red;"
+                                        + " -fx-font-style: bold;"
+                                        + " -fx-text-alignment: center;"
+                                        + " -fx-background-radius: 5;");
 
-                        txtCaixasOff.setStyle("-fx-background-color: black;"
-                                + " -fx-text-fill: white;"
-                                + " -fx-background-radius: 5");
+                                player.play();
 
-                        player.stop();
+                        } else {
 
+                            txtCaixasOff.setStyle("-fx-background-color: black;"
+                                    + " -fx-text-fill: white;"
+                                    + " -fx-background-radius: 5");
+
+                            player.stop();
+
+                        }
+
+                        Estatico.getListaCaixas().stream().map((c) -> {
+
+                            Circle circle = new Circle();
+                            boolean caixaOn = false;
+
+                            for (Map<String, String> entry : usuarios) {
+
+                                if (entry.containsValue("<pppoe-" + c.getUsuario1() + ">")) {
+                                    caixaOn = true;
+                                }
+                                if (entry.containsValue("<pppoe-" + c.getUsuario2() + ">")) {
+                                    caixaOn = true;
+                                }
+                                if (entry.containsValue("<pppoe-" + c.getUsuario3() + ">")) {
+                                    caixaOn = true;
+                                }
+                                if (entry.containsValue("<pppoe-" + c.getUsuario4() + ">")) {
+                                    caixaOn = true;
+                                }
+                                if (entry.containsValue("<pppoe-" + c.getUsuario5() + ">")) {
+                                    caixaOn = true;
+                                }
+                                if (entry.containsValue("<pppoe-" + c.getUsuario6() + ">")) {
+                                    caixaOn = true;
+                                }
+                                if (entry.containsValue("<pppoe-" + c.getUsuario7() + ">")) {
+                                    caixaOn = true;
+                                }
+                                if (entry.containsValue("<pppoe-" + c.getUsuario8() + ">")) {
+                                    caixaOn = true;
+                                }
+
+                            }
+
+                            if (caixaOn) {
+                                circle.setFill(Paint.valueOf("BLUE"));
+                                //c.setOnline(true);
+                                //Estatico.setListaCaixasOn(c);
+                            } else {
+                                circle.setFill(Paint.valueOf("RED"));
+                                //c.setOnline(false);
+                                //Estatico.setListaCaixasOff(c);
+                            }
+
+                            circle.setCenterX(c.getX());
+                            circle.setCenterY(c.getY());
+                            circle.setRadius(10.0f);
+                            circle.setCursor(Cursor.HAND);
+
+                            circle.setOnMouseClicked((javafx.scene.input.MouseEvent event) -> {
+                                String usuarios1 = "";
+                                if (c.getUsuario1() != null && !c.getUsuario1().isEmpty()) {
+                                    usuarios1 += c.getUsuario1() + "\n";
+                                }
+                                if (c.getUsuario2() != null && !c.getUsuario2().isEmpty()) {
+                                    usuarios1 += c.getUsuario2() + "\n";
+                                }
+                                if (c.getUsuario3() != null && !c.getUsuario3().isEmpty()) {
+                                    usuarios1 += c.getUsuario3() + "\n";
+                                }
+                                if (c.getUsuario4() != null && !c.getUsuario4().isEmpty()) {
+                                    usuarios1 += c.getUsuario4() + "\n";
+                                }
+                                if (c.getUsuario5() != null && !c.getUsuario5().isEmpty()) {
+                                    usuarios1 += c.getUsuario5() + "\n";
+                                }
+                                if (c.getUsuario6() != null && !c.getUsuario6().isEmpty()) {
+                                    usuarios1 += c.getUsuario6() + "\n";
+                                }
+                                if (c.getUsuario7() != null && !c.getUsuario7().isEmpty()) {
+                                    usuarios1 += c.getUsuario7() + "\n";
+                                }
+                                if (c.getUsuario8() != null && !c.getUsuario8().isEmpty()) {
+                                    usuarios1 += c.getUsuario8() + "\n";
+                                }
+
+                                txtSistema.setText("CAIXA\n"
+                                        + c.getCodigo()
+                                        + "\n" + usuarios1
+                                        + "\n" + "LOCALIZACAO\n"
+                                        + c.getEndereco() + "\n"
+                                                + "X: " + c.getX()
+                                        + " - Y: " + c.getY());
+
+                                if (event.getButton().equals(MouseButton.PRIMARY)) {
+                                    if (event.getClickCount() == 2) {
+
+                                        System.out.println("EDITAR CAIXA");
+
+                                        Estatico.setEditarCaixa(true);
+                                        Estatico.setCaixa(c);
+
+                                        cadastrarCaixa();
+
+                                    }
+                                }
+
+                            });
+                            return circle;
+                        }).forEachOrdered((circle) -> {
+                            apMap1.getChildren().add(
+                                    circle
+                            );
+                        });
                     }
 
-                    Estatico.getListaCaixas().stream().map((c) -> {
-                        
-                        Circle circle = new Circle();
-                        boolean caixaOn = false;
-                        
-                        for (Map<String, String> entry : usuarios) {
+                    //conectar();
+                    //localizarCaixas();
+                    //Thread.sleep(500);
 
-                            if (entry.containsValue("<pppoe-" + c.getUsuario1() + ">")) {
-                                caixaOn = true;
-                            }
-                            if (entry.containsValue("<pppoe-" + c.getUsuario2() + ">")) {
-                                caixaOn = true;
-                            }
-                            if (entry.containsValue("<pppoe-" + c.getUsuario3() + ">")) {
-                                caixaOn = true;
-                            }
-                            if (entry.containsValue("<pppoe-" + c.getUsuario4() + ">")) {
-                                caixaOn = true;
-                            }
-                            if (entry.containsValue("<pppoe-" + c.getUsuario5() + ">")) {
-                                caixaOn = true;
-                            }
-                            if (entry.containsValue("<pppoe-" + c.getUsuario6() + ">")) {
-                                caixaOn = true;
-                            }
-                            if (entry.containsValue("<pppoe-" + c.getUsuario7() + ">")) {
-                                caixaOn = true;
-                            }
-                            if (entry.containsValue("<pppoe-" + c.getUsuario8() + ">")) {
-                                caixaOn = true;
-                            }
-
-                        }
-                        
-                        if (caixaOn) {
-                            circle.setFill(Paint.valueOf("BLUE"));
-                            //c.setOnline(true);
-                            //Estatico.setListaCaixasOn(c);
-                        } else {
-                            circle.setFill(Paint.valueOf("RED"));
-                            //c.setOnline(false);
-                            //Estatico.setListaCaixasOff(c);
-                        }
-                        
-                        circle.setCenterX(c.getX());
-                        circle.setCenterY(c.getY());
-                        circle.setRadius(10.0f);
-                        
-                        circle.setOnMouseClicked((javafx.scene.input.MouseEvent event) -> {
-                            String usuarios1 = "";
-                            if (c.getUsuario1() != null && !c.getUsuario1().isEmpty()) {
-                                usuarios1 += c.getUsuario1() + "\n";
-                            }
-                            if (c.getUsuario2() != null && !c.getUsuario2().isEmpty()) {
-                                usuarios1 += c.getUsuario2() + "\n";
-                            }
-                            if (c.getUsuario3() != null && !c.getUsuario3().isEmpty()) {
-                                usuarios1 += c.getUsuario3() + "\n";
-                            }
-                            if (c.getUsuario4() != null && !c.getUsuario4().isEmpty()) {
-                                usuarios1 += c.getUsuario4() + "\n";
-                            }
-                            if (c.getUsuario5() != null && !c.getUsuario5().isEmpty()) {
-                                usuarios1 += c.getUsuario5() + "\n";
-                            }
-                            if (c.getUsuario6() != null && !c.getUsuario6().isEmpty()) {
-                                usuarios1 += c.getUsuario6() + "\n";
-                            }
-                            if (c.getUsuario7() != null && !c.getUsuario7().isEmpty()) {
-                                usuarios1 += c.getUsuario7() + "\n";
-                            }
-                            if (c.getUsuario8() != null && !c.getUsuario8().isEmpty()) {
-                                usuarios1 += c.getUsuario8() + "\n";
-                            }
-
-                            txtSistema.setText("CAIXA\n"
-                                    + c.getCodigo()
-                                    + "\n" + usuarios1
-                                    + "\n" + "LOCALIZACAO\n"
-                                    + c.getEndereco() + "\n"
-                                            + "X: " + c.getX()
-                                    + " - Y: " + c.getY());
-
-                            if (event.getButton().equals(MouseButton.PRIMARY)) {
-                                if (event.getClickCount() == 2) {
-
-                                    System.out.println("EDITAR CAIXA");
-
-                                    Estatico.setEditarCaixa(true);
-                                    Estatico.setCaixa(c);
-
-                                    cadastrarCaixa();
-
-                                }
-                            }
-
-                        });
-                        return circle;
-                    }).forEachOrdered((circle) -> {
-                        apMap1.getChildren().add(
-                                circle
-                        );
-                    });
+                } catch (Exception e) {
+                    
+                    System.err.println("ERRO ANIMATION TIMER: " + e.getMessage());
+//                    Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
+//                    dialogoInfo.setTitle("Informação");
+//                    dialogoInfo.setHeaderText("Erro!");
+//                    dialogoInfo.setContentText("Erro: " + e.getMessage());
+//                    dialogoInfo.showAndWait();
                 }
-
-                //conectar();
-                //localizarCaixas();
-                Thread.sleep(60);
-
-            } catch (InterruptedException e) {
-                Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
-                dialogoInfo.setTitle("Informação");
-                dialogoInfo.setHeaderText("Erro!");
-                dialogoInfo.setContentText("Erro: " + e.getMessage());
-                dialogoInfo.showAndWait();
+                
             }
+
         }
     };
 
