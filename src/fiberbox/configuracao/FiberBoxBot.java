@@ -176,6 +176,7 @@ public class FiberBoxBot extends TelegramLongPollingBot{
             
             System.out.println("CHAT ID: " + update.getMessage().getChatId());
             System.out.println("Mensagem: " + command);
+            System.out.println("Data: " + update.getMessage().getDate());
             
             try {
                 execute(message); // Call method to send the message
