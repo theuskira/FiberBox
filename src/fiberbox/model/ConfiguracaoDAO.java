@@ -56,9 +56,12 @@ public class ConfiguracaoDAO {
             stmt = con.prepareStatement("CREATE TABLE IF NOT EXISTS "
                     + "configuracao("
                     + "usuario VARCHAR(50) PRIMARY KEY,"
-                    + "som BOOL,"
-                    + "atualizacao BOOL,"
-                    + "conexaoAutomatica BOOL);");
+                    + "som INTEGER,"
+                    + "caixaOn VARCHAR(10),"
+                    + "caixaOff VARCHAR(10),"
+                    + "caixaTam DOUBLE,"
+                    + "atualizacao INTEGER,"
+                    + "conexaoAutomatica INTEGER);");
             
             stmt.execute();
             
@@ -82,7 +85,7 @@ public class ConfiguracaoDAO {
     
     public boolean inserir(Configuracao configuracao){
         
-        System.out.println("** CRIAR USUARIO **");
+        System.out.println("** NOVA CONFIGURAÇÃO **");
         
         boolean retorno = false;
         
@@ -90,18 +93,21 @@ public class ConfiguracaoDAO {
             
             stmt = con.prepareStatement("INSERT INTO "
                     + "configuracao "
-                    + "(usuario, som, atualizar, conexaoAutomatica) "
+                    + "(usuario, som, caixaOn, caixaOff, caixaTam, atualizacao, conexaoAutomatica) "
                     + "VALUES "
-                    + "(?, ?, ?, ?);");
+                    + "(?, ?, ?, ?, ?, ?, ?);");
             
             stmt.setString(1, configuracao.getUsuario());
-            stmt.setBoolean(2, configuracao.getSom());
-            stmt.setBoolean(3, configuracao.getAtualizacao());
-            stmt.setBoolean(4, configuracao.getConexaoAutomatica());
+            stmt.setInt(2, configuracao.getSom());
+            stmt.setString(3, configuracao.getCaixaOn());
+            stmt.setString(4, configuracao.getCaixaOff());
+            stmt.setDouble(5, configuracao.getCaixaTam());
+            stmt.setInt(6, configuracao.getAtualizacao());
+            stmt.setInt(7, configuracao.getConexaoAutomatica());
             
             stmt.executeUpdate();
             
-            System.out.println("Configuracao de " + configuracao.getUsuario()+ " cadastrada!");
+            System.out.println("Configuracão de " + configuracao.getUsuario()+ " cadastrada!");
             
             retorno = true;
             
@@ -136,9 +142,12 @@ public class ConfiguracaoDAO {
             while(rs.next()){
                 
                 u.setUsuario(rs.getString("usuario"));
-                u.setSom(rs.getBoolean("som"));
-                u.setAtualizacao(rs.getBoolean("atualizacao"));
-                u.setConexaoAutomatica(rs.getBoolean("conexaoAutomatica"));
+                u.setSom(rs.getInt("som"));
+                u.setCaixaOn(rs.getString("caixaOn"));
+                u.setCaixaOff(rs.getString("caixaOff"));
+                u.setCaixaTam(rs.getDouble("caixaTam"));
+                u.setAtualizacao(rs.getInt("atualizacao"));
+                u.setConexaoAutomatica(rs.getInt("conexaoAutomatica"));
                 
                 System.out.println("* Configuracao localizada: " + u.getUsuario());
                 
@@ -169,14 +178,23 @@ public class ConfiguracaoDAO {
             stmt = con.prepareStatement("UPDATE "
                     + "configuracao "
                     + " SET "
-                    + "usuario = ?, som = ?, atualizacao = ?, conexaoAutomatica = ? "
+                    + "usuario = ?,"
+                    + " som = ?,"
+                    + " caixaOn = ?,"
+                    + " caixaOff = ?,"
+                    + " caixaTam = ?,"
+                    + " atualizacao = ?,"
+                    + " conexaoAutomatica = ? "
                     + "WHERE usuario = ?");
             
             stmt.setString(1, configuracao.getUsuario());
-            stmt.setBoolean(2, configuracao.getSom());
-            stmt.setBoolean(3, configuracao.getAtualizacao());
-            stmt.setBoolean(4, configuracao.getConexaoAutomatica());
-            stmt.setString(5, usuarioAnterior);
+            stmt.setInt(2, configuracao.getSom());
+            stmt.setString(3, configuracao.getCaixaOn());
+            stmt.setString(4, configuracao.getCaixaOff());
+            stmt.setDouble(5, configuracao.getCaixaTam());
+            stmt.setInt(6, configuracao.getAtualizacao());
+            stmt.setInt(7, configuracao.getConexaoAutomatica());
+            stmt.setString(8, usuarioAnterior);
             
             stmt.executeUpdate();
             

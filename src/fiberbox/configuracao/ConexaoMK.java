@@ -34,13 +34,13 @@ public class ConexaoMK {
                     
                     System.out.println("** CONEXAO MIKROTIK: CONECTADO");
                     
-                    Estatico.setStatusSistema(true);
+                    //Estatico.setStatusSistema(true);
                     
                 }else{
                     
                     System.err.println("** CONEXAO MIKROTIK: DESCONECTADO");
                     
-                    Estatico.setStatusSistema(false);
+                    //Estatico.setStatusSistema(false);
                     
                 }   
                 
@@ -65,6 +65,38 @@ public class ConexaoMK {
         }
         
         return rs;
+        
+    }
+    
+    public Boolean conectar(String ip, int porta, String usuario, String senha){
+        
+        try (ApiConnection con = ApiConnection.connect(ip)) {
+                
+                con.setTimeout(5 * 1000);
+                
+                con.login(usuario, senha);   // login to router
+                
+                if(con.isConnected()){
+                    
+                    System.out.println("** CONEXAO MIKROTIK: CONECTADO");
+                    
+                    Estatico.setStatusSistema(true);
+                    
+                }else{
+                    
+                    System.err.println("** CONEXAO MIKROTIK: DESCONECTADO");
+                    
+                    Estatico.setStatusSistema(false);
+                    
+                }
+                
+                con.close();
+        
+            }catch(MikrotikApiException e){
+                System.err.println(e.getMessage());
+            }
+        
+        return Estatico.getStatusSistema();
         
     }
     

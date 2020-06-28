@@ -8,7 +8,7 @@ public class Ramal {
     
     private String nome, ip, senha;
     private int porta;
-    private String usuario;
+    private String usuario, caminhoFoto;
 
     public Ramal() {
     }
@@ -19,12 +19,14 @@ public class Ramal {
         this.senha = senha;
         this.porta = porta;
     }
-    public Ramal(String nome, String ip, String senha, int porta, String usuario) {
+    public Ramal(String nome, String ip, String senha, int porta, String usuario, String caminhoFoto) {
         this.nome = nome;
         this.ip = ip;
         this.senha = senha;
         this.porta = porta;
         this.usuario = usuario;
+        this.caminhoFoto = caminhoFoto;
+        
     }
     
     public String getNome() {
@@ -66,5 +68,15 @@ public class Ramal {
     public void setUsuario(String usuario) {
         this.usuario = usuario;
     }
+
+    public String getCaminhoFoto() {
+        return caminhoFoto;
+    }
+
+    public void setCaminhoFoto(String caminhoFoto) {
+        this.caminhoFoto = caminhoFoto;
+    }
+    
+    
     
 }

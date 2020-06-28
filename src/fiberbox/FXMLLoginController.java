@@ -9,6 +9,8 @@ import fiberbox.model.RamalDAO;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -21,7 +23,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import me.legrange.mikrotik.ApiConnectionException;
+import me.legrange.mikrotik.MikrotikApiException;
 
 /**
  * FXML Controller class
@@ -53,15 +55,20 @@ public class FXMLLoginController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         
+        //new ConfiguracaoDAO().droparTabela();
         new ConfiguracaoDAO().verificarTabela();
         
         btnEntrar.setOnAction((event) -> {
-            verificar();
+            try {
+                verificar();
+            } catch (MikrotikApiException ex) {
+                Logger.getLogger(FXMLLoginController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
         
     }
 
-    private void verificar(){
+    private void verificar() throws MikrotikApiException{
         
         int erro = 0 ;
         String erro1 = "";
@@ -112,29 +119,47 @@ public class FXMLLoginController implements Initializable {
             
             Configuracao c = new ConfiguracaoDAO().localizar(txtUsuario.getText());
             
-            if(c != null){
+            if(c.getUsuario() != null){
+                
                 Estatico.setConfiguracao(c);
+                
+                System.out.println("* CONFIGURAÇÃO CARREGADA!\n");
+                
+                System.out.println("* USUARIO: " + Estatico.getConfiguracao().getUsuario());
+                System.out.println("* SOM: " + Estatico.getConfiguracao().getSom());
+                System.out.println("* ATUALIZACAO AUTOMATICA: " + Estatico.getConfiguracao().getAtualizacao());
+                System.out.println("* CONEXAOCAO AUTOMATICA: " + Estatico.getConfiguracao().getConexaoAutomatica());
+                System.out.println("* COR CAIXA ON: " + Estatico.getConfiguracao().getCaixaOn());
+                System.out.println("* COR CAIXA OFF: " + Estatico.getConfiguracao().getCaixaOff());
+                System.out.println("* TAMANHO/RAIO CAIXA: " + Estatico.getConfiguracao().getCaixaTam());
+                
             }else{
+                
                 Configuracao newC = new Configuracao();
+                
                 newC.setUsuario(txtUsuario.getText());
-                newC.setSom(true);
-                newC.setAtualizacao(true);
+                newC.setSom(1);
+                newC.setAtualizacao(1);
+                newC.setCaixaOff("RED");
+                newC.setCaixaOn("DODGERBLUE");
+                newC.setCaixaTam(15.0);
+                
                 if(cbConexaoAutomatica.isArmed()){
-                    newC.setConexaoAutomatica(true);
-                    System.out.println("Conexao automatica: ON");
+                    
+                    newC.setConexaoAutomatica(1);
+                    System.out.println("* Conexao automatica: ON");
+                    
                 }else{
-                    newC.setConexaoAutomatica(false);
-                    System.out.println("Conexao automatica: OFF");
+                    
+                    newC.setConexaoAutomatica(0);
+                    System.out.println("* Conexao automatica: OFF");
+                    
                 }
+                
                 new ConfiguracaoDAO().inserir(newC);
-                new RamalDAO().inserir(
-                        new Ramal("Novo Ramal",
-                                txtServidor.getText(),
-                                txtSenha.getText(),
-                                Integer.parseInt(txtSenha.getText()),
-                                txtUsuario.getText())
-                );
+                
                 Estatico.setConfiguracao(newC);
+                
             }
             
             Estatico.setUsuario(txtUsuario.getText());
@@ -148,12 +173,14 @@ public class FXMLLoginController implements Initializable {
         
     }
     
+    /*
     private void conectar() {
 
         System.out.println("** INICIANDO CONEXAO");
 
         try {
 
+            //new ConexaoMK().lista(txtServidor.getText(), Integer.parseInt(txtPorta.getText()), txtUsuario.getText(), txtSenha.getText());
             new ConexaoMK().lista(txtServidor.getText(), Integer.parseInt(txtPorta.getText()), txtUsuario.getText(), txtSenha.getText());
 
         } catch (ApiConnectionException e) {
@@ -194,6 +221,37 @@ public class FXMLLoginController implements Initializable {
         }
 
     }
+*/
+    
+    private void conectar() throws MikrotikApiException {
+
+        System.out.println("** INICIANDO CONEXAO");
+
+        new ConexaoMK().conectar(txtServidor.getText(), Integer.parseInt(txtPorta.getText()), txtUsuario.getText(), txtSenha.getText());
+        
+        if (Estatico.getStatusSistema() != null && Estatico.getStatusSistema()) {
+            
+            Estatico.setIp(txtServidor.getText());
+            Estatico.setPorta(Integer.parseInt(txtPorta.getText()));
+            Estatico.setUsuario(txtUsuario.getText());
+            Estatico.setSenha(txtSenha.getText());
+            
+            iniciarPrincipal();
+            
+        } else {
+            
+            System.err.println("Erro: Sistema Off-Line ou Nullo");
+            
+            Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
+            dialogoInfo.setTitle("Informação");
+            dialogoInfo.setHeaderText("Erro!");
+            dialogoInfo.setContentText("Sistema Off-Line ou Nullo");
+            dialogoInfo.initOwner(btnEntrar.getScene().getWindow());
+            dialogoInfo.showAndWait();
+
+        }
+
+    }
     
     private void iniciarPrincipal(){
         
@@ -202,8 +260,9 @@ public class FXMLLoginController implements Initializable {
             Parent r = (Parent) fxmlPrincipal.load();
             Stage stage = new Stage();
 
-            stage.getIcons().add(new Image("fiberbox/img/FiberBox.png"));
+            stage.getIcons().add(new Image("fiberbox/img/FiberBox1.png"));
             stage.setScene(new Scene(r));
+            stage.setTitle("FiberBox | " + Estatico.getConfiguracao().getUsuario());
             stage.setResizable(false);
             stage.setMaximized(true);
             stage.show();

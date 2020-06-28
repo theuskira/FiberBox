@@ -19,7 +19,7 @@ public class FiberBox extends Application {
         
         Scene scene = new Scene(root);
         
-        stage.getIcons().add(new Image("fiberbox/img/FiberBox.png"));
+        stage.getIcons().add(new Image("fiberbox/img/FiberBox1.png"));
         stage.setTitle("FiberBox");
         stage.setScene(scene);
         stage.setResizable(false);

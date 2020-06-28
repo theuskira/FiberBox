@@ -375,12 +375,17 @@ public class FXMLDocumentController implements Initializable {
 
         try {
             
-            //if(Estatico.getStatusSistema()){
+            new ConexaoMK().conectar(Estatico.getIp(), Estatico.getPorta(), Estatico.getUsuario(), Estatico.getSenha());
+            
+            if(Estatico.getStatusSistema()){
                 
                 usuarios = new ConexaoMK().lista(Estatico.getIp(), Estatico.getPorta(), Estatico.getUsuario(), Estatico.getSenha());
-            //}
-
-            //System.out.println("** SISTEMA CONECTADO");
+            
+            }else{
+                
+                apMap1.getChildren().clear();
+                
+            }
 
         } catch (MikrotikApiException e) {
 
@@ -394,7 +399,7 @@ public class FXMLDocumentController implements Initializable {
 
         } finally {
 
-            if (usuarios != null) {
+            if (usuarios != null && Estatico.getStatusSistema()) {
 
                 System.out.println("Usuário(s): " + usuarios.size());
                 Estatico.setTotalUsuarios(usuarios.size());
@@ -477,12 +482,21 @@ public class FXMLDocumentController implements Initializable {
                 caixasOnline++;
                 c.setOnline(true);
                 Estatico.setListaCaixasOn(c);
-                circle.setFill(Paint.valueOf("BLUE"));
+                if(Estatico.getConfiguracao().getCaixaOn() != null){
+                    circle.setFill(Paint.valueOf(Estatico.getConfiguracao().getCaixaOn()));
+                }else{
+                    circle.setFill(Paint.valueOf("DODGERBLUE"));
+                }
+                
             } else {
                 c.setOnline(false);
                 Estatico.setListaCaixasOff(c);
                 caixasOff++;
-                circle.setFill(Paint.valueOf("RED"));
+                if(Estatico.getConfiguracao().getCaixaOff() != null){
+                    circle.setFill(Paint.valueOf(Estatico.getConfiguracao().getCaixaOff()));
+                }else{
+                    circle.setFill(Paint.valueOf("RED"));
+                }
             }
             
             if (caixaOn) {
@@ -496,9 +510,15 @@ public class FXMLDocumentController implements Initializable {
 
             circle.setCenterX(c.getX());
             circle.setCenterY(c.getY());
-            circle.setRadius(10.0f);
+            
+            if(Estatico.getConfiguracao().getCaixaTam() != null){
+                circle.setRadius(Estatico.getConfiguracao().getCaixaTam());
+            }else{
+                circle.setRadius(15.0);
+            }
+            
             circle.setCursor(Cursor.HAND);
-            circle.setStroke(Paint.valueOf("Black"));
+            circle.setStroke(Paint.valueOf("BLACK"));
             
             circle.setOnMouseEntered((event) -> {
                 
@@ -871,6 +891,61 @@ public class FXMLDocumentController implements Initializable {
         DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Date date = new Date();
         return dateFormat.format(date);
+    }
+    
+    public void abrirConfiguracoes(){
+        
+        try {
+
+            FXMLLoader fxmlCaixa = new FXMLLoader(getClass().getResource("FXMLConfiguracoes.fxml"));
+            Parent r = (Parent) fxmlCaixa.load();
+            Stage stage = new Stage();
+
+            stage.getIcons().add(new Image("fiberbox/img/FiberBox1.png"));
+            stage.setScene(new Scene(r));
+            stage.setTitle("FiberBox - Configurações | " + Estatico.getConfiguracao().getUsuario());
+            //stage.setResizable(false);
+            //stage.setAlwaysOnTop(true);
+            stage.show();
+
+        } catch (IOException e) {
+
+            Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
+            dialogoInfo.setTitle("Informação");
+            dialogoInfo.setHeaderText("Erro!");
+            dialogoInfo.setContentText("Erro: " + e.getMessage());
+            dialogoInfo.showAndWait();
+
+        }
+        
+    }
+    
+    public void novoRamal(){
+        
+        try {
+
+            FXMLLoader fxmlCaixa = new FXMLLoader(getClass().getResource("FXMLNovoRamal.fxml"));
+            Parent r = (Parent) fxmlCaixa.load();
+            Stage stage = new Stage();
+
+            stage.getIcons().add(new Image("fiberbox/img/FiberBox1.png"));
+            stage.setScene(new Scene(r));
+            stage.setTitle("FiberBox - Novo Ramal | " + Estatico.getConfiguracao().getUsuario());
+            Estatico.setNovoRamal(true);
+            //stage.setResizable(false);
+            //stage.setAlwaysOnTop(true);
+            stage.show();
+
+        } catch (IOException e) {
+
+            Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
+            dialogoInfo.setTitle("Informação");
+            dialogoInfo.setHeaderText("Erro!");
+            dialogoInfo.setContentText("Erro: " + e.getMessage());
+            dialogoInfo.showAndWait();
+
+        }
+        
     }
 
 }

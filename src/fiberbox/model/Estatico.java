@@ -27,6 +27,7 @@ public class Estatico {
     
     private static String txtStatusSistema;
     private static Boolean statusSistema;
+    private static Boolean novoRamal;
     private static String usuario;
     private static String senha;
     private static String ip;
@@ -176,6 +177,14 @@ public class Estatico {
 
     public static void setConfiguracao(Configuracao configuracao) {
         Estatico.configuracao = configuracao;
+    }
+
+    public static Boolean getNovoRamal() {
+        return novoRamal;
+    }
+
+    public static void setNovoRamal(Boolean novoRamal) {
+        Estatico.novoRamal = novoRamal;
     }
     
     

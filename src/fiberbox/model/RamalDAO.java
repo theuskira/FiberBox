@@ -59,6 +59,7 @@ public class RamalDAO {
                     + "ramal("
                     + "usuario VARCHAR(50) PRIMARY KEY,"
                     + "nome VARCHAR(50),"
+                    + "caminhoFoto VARCHAR,"
                     + "ip VARCHAR(19),"
                     + "senha VARCHAR(50),"
                     + "porta Integer);");
@@ -93,15 +94,16 @@ public class RamalDAO {
             
             stmt = con.prepareStatement("INSERT INTO "
                     + "ramal "
-                    + "(usuario, nome, ip, senha, porta) "
+                    + "(usuario, nome, caminhoFoto, ip, senha, porta) "
                     + "VALUES "
-                    + "(?, ?, ?, ?, ?);");
+                    + "(?, ?, ?, ?, ?,?);");
             
             stmt.setString(1, Estatico.getUsuario());
             stmt.setString(2, ramal.getNome());
-            stmt.setString(3, ramal.getIp());
-            stmt.setString(4, ramal.getSenha());
-            stmt.setInt(5, ramal.getPorta());
+            stmt.setString(3, ramal.getCaminhoFoto());
+            stmt.setString(4, ramal.getIp());
+            stmt.setString(5, ramal.getSenha());
+            stmt.setInt(6, ramal.getPorta());
             
             stmt.executeUpdate();
             
@@ -140,9 +142,11 @@ public class RamalDAO {
             while(rs.next()){
                 
                 u.setNome(rs.getString("nome"));
+                u.setCaminhoFoto(rs.getString("caminhoFoto"));
                 u.setIp(rs.getString("ip"));
                 u.setSenha(rs.getString("senha"));
                 u.setPorta(rs.getInt("porta"));
+                u.setUsuario(usuario);
                 
                 System.out.println("* Ramal localizado: " + u.getNome());
                 
@@ -173,14 +177,15 @@ public class RamalDAO {
             stmt = con.prepareStatement("UPDATE "
                     + "ramal "
                     + " SET "
-                    + "usuario = ?, nome = ?, ip = ?, senha = ?, porta = ? "
+                    + "usuario = ?, nome = ?, caminhoFoto = ?, ip = ?, senha = ?, porta = ? "
                     + "WHERE usuario = ?");
             
             stmt.setString(1, Estatico.getUsuario());
             stmt.setString(2, ramal.getNome());
-            stmt.setString(3, ramal.getIp());
-            stmt.setString(4, ramal.getSenha());
-            stmt.setInt(5, ramal.getPorta());
+            stmt.setString(3, ramal.getCaminhoFoto());
+            stmt.setString(4, ramal.getIp());
+            stmt.setString(5, ramal.getSenha());
+            stmt.setInt(6, ramal.getPorta());
             stmt.setString(6, usuarioAnterior);
             
             stmt.executeUpdate();
@@ -222,7 +227,9 @@ public class RamalDAO {
                         rs.getString("nome"),
                         rs.getString("ip"),
                         rs.getString("senha"),
-                        rs.getInt(("porta"))
+                        rs.getInt(("porta")),
+                        rs.getString("usuario"),
+                        rs.getString("caminhoFoto")
                     );
                 
                 System.out.println("* Ramal encontrado: " + c.getNome());
