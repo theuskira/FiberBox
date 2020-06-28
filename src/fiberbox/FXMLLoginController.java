@@ -1,7 +1,11 @@
 package fiberbox;
 
 import fiberbox.configuracao.ConexaoMK;
+import fiberbox.model.Configuracao;
+import fiberbox.model.ConfiguracaoDAO;
 import fiberbox.model.Estatico;
+import fiberbox.model.Ramal;
+import fiberbox.model.RamalDAO;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -12,17 +16,18 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import me.legrange.mikrotik.ApiConnectionException;
 
 /**
  * FXML Controller class
  *
  * @author Matheus - DELL
  */
-
 
 public class FXMLLoginController implements Initializable {
     
@@ -40,13 +45,15 @@ public class FXMLLoginController implements Initializable {
     
     @FXML
     private Button btnEntrar;
+    
+    @FXML
+    private CheckBox cbConexaoAutomatica;
 
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        
+        new ConfiguracaoDAO().verificarTabela();
         
         btnEntrar.setOnAction((event) -> {
             verificar();
@@ -103,6 +110,38 @@ public class FXMLLoginController implements Initializable {
             
         }else{
             
+            Configuracao c = new ConfiguracaoDAO().localizar(txtUsuario.getText());
+            
+            if(c != null){
+                Estatico.setConfiguracao(c);
+            }else{
+                Configuracao newC = new Configuracao();
+                newC.setUsuario(txtUsuario.getText());
+                newC.setSom(true);
+                newC.setAtualizacao(true);
+                if(cbConexaoAutomatica.isArmed()){
+                    newC.setConexaoAutomatica(true);
+                    System.out.println("Conexao automatica: ON");
+                }else{
+                    newC.setConexaoAutomatica(false);
+                    System.out.println("Conexao automatica: OFF");
+                }
+                new ConfiguracaoDAO().inserir(newC);
+                new RamalDAO().inserir(
+                        new Ramal("Novo Ramal",
+                                txtServidor.getText(),
+                                txtSenha.getText(),
+                                Integer.parseInt(txtSenha.getText()),
+                                txtUsuario.getText())
+                );
+                Estatico.setConfiguracao(newC);
+            }
+            
+            Estatico.setUsuario(txtUsuario.getText());
+            Estatico.setSenha(txtSenha.getText());
+            Estatico.setIp(txtServidor.getText());
+            Estatico.setPorta(Integer.parseInt(txtPorta.getText()));
+            
             conectar();
             
         }
@@ -115,9 +154,9 @@ public class FXMLLoginController implements Initializable {
 
         try {
 
-            new ConexaoMK().lista(txtServidor.getText(), txtUsuario.getText(), txtSenha.getText());
+            new ConexaoMK().lista(txtServidor.getText(), Integer.parseInt(txtPorta.getText()), txtUsuario.getText(), txtSenha.getText());
 
-        } catch (Exception e) {
+        } catch (ApiConnectionException e) {
 
             System.err.println("Erro de conexão: " + e.getMessage());
 
@@ -130,10 +169,10 @@ public class FXMLLoginController implements Initializable {
 
         } finally {
 
-            if (Estatico.getStatusSistema()) {
+            if (Estatico.getStatusSistema() != null && Estatico.getStatusSistema()) {
 
                 Estatico.setIp(txtServidor.getText());
-                Estatico.setPorta(txtPorta.getText());
+                Estatico.setPorta(Integer.parseInt(txtPorta.getText()));
                 Estatico.setUsuario(txtUsuario.getText());
                 Estatico.setSenha(txtSenha.getText());
                 

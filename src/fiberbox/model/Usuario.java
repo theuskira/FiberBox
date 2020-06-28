@@ -1,9 +1,13 @@
 package fiberbox.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Usuario {
 
     private String usuario, caixa;
     private Boolean status;
+    private List<Ramal> ramal = new ArrayList<>();
 
     public Usuario() {
     }
@@ -37,7 +41,13 @@ public class Usuario {
     public void setStatus(Boolean status) {
         this.status = status;
     }
-    
-    
+
+    public List<Ramal> getRamal() {
+        return ramal;
+    }
+
+    public void setRamal(List<Ramal> ramal) {
+        this.ramal = ramal;
+    }
     
 }

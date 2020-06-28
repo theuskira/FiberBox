@@ -15,15 +15,15 @@ public class FiberBox extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("FXMLLogin.fxml"));
         
         Scene scene = new Scene(root);
         
-        stage.getIcons().add(new Image("fiberbox/img/logo1.png"));
-        stage.setTitle("DW Telecom");
+        stage.getIcons().add(new Image("fiberbox/img/FiberBox.png"));
+        stage.setTitle("FiberBox");
         stage.setScene(scene);
         stage.setResizable(false);
-        stage.setMaximized(true);
+        //stage.setMaximized(true);
         stage.show();
     }
 

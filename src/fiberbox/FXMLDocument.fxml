@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
@@ -17,9 +19,11 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="718.0" prefWidth="1278.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fiberbox.FXMLDocumentController">
+<BorderPane fx:id="bpPrincipal" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="718.0" prefWidth="1278.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fiberbox.FXMLDocumentController">
    <top>
       <MenuBar BorderPane.alignment="CENTER">
         <menus>
@@ -42,11 +46,53 @@
       </MenuBar>
    </top>
    <right>
-      <VBox alignment="CENTER" prefHeight="693.0" prefWidth="200.0" spacing="5.0" style="-fx-background-color: gray;" BorderPane.alignment="CENTER">
+      <VBox alignment="TOP_CENTER" prefHeight="693.0" prefWidth="200.0" spacing="5.0" style="-fx-background-color: gray;" BorderPane.alignment="CENTER">
          <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="35.0" />
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
          <children>
+            <HBox alignment="CENTER" spacing="5.0">
+               <children>
+                  <Button fx:id="btnMusica" mnemonicParsing="false" onAction="#mutarSom" opacity="0.7" style="-fx-background-color: green; -fx-background-radius: 5;" text="SOM ON" textFill="WHITE">
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+                  <Button fx:id="btnSincronizar" mnemonicParsing="false" onAction="#atualizacao" opacity="0.7" style="-fx-background-color: GREEN; -fx-background-radius: 5;" text="SINCRONIZAÇÃO ON" textFill="WHITE">
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Button>
+               </children>
+            </HBox>
+            <Label fx:id="txtUsuario" style="-fx-background-color: black; -fx-background-radius: 5;" text="Usuário: ?" textAlignment="CENTER" textFill="WHITE">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="txtStatusSistema" style="-fx-background-color: black; -fx-background-radius: 5;" text="Status do Sistema: ?" textAlignment="CENTER" textFill="WHITE">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <font>
+                  <Font name="System Bold" size="14.0" />
+               </font>
+            </Label>
             <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@img/logo2.png" />
@@ -63,6 +109,66 @@
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                </padding>
             </Label>
+            <VBox alignment="CENTER" fillWidth="false" spacing="5.0" style="-fx-background-color: black; -fx-background-radius: 5;">
+               <children>
+                  <Label text="CAIXAS OFF" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="txtCaixasOff" text="?" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </VBox>
+            <VBox alignment="CENTER" fillWidth="false" spacing="5.0" style="-fx-background-color: black; -fx-background-radius: 5;">
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+               <children>
+                  <Label text="CAIXAS ON" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="txtCaixasOn" text="?" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </VBox>
+            <VBox alignment="CENTER" fillWidth="false" spacing="5.0" style="-fx-background-color: black; -fx-background-radius: 5;">
+               <children>
+                  <Label text="USUÁRIOS ONLINE" textFill="WHITE">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="txtTotalUsuarios" text="?" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="24.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </VBox>
          </children></VBox>
    </right>
    <center>
@@ -70,96 +176,7 @@
         <tabs>
           <Tab text="Cândido Mendes">
             <content>
-              <AnchorPane fx:id="apMap1" minHeight="-Infinity" minWidth="-Infinity" prefHeight="664.0" prefWidth="1078.0">
-                     <children>
-                        <ImageView fx:id="background1" fitHeight="664.0" fitWidth="1078.0" pickOnBounds="true" smooth="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <image>
-                              <Image url="@img/background1.png" />
-                           </image>
-                        </ImageView>
-                        <Button fx:id="btnSincronizar" mnemonicParsing="false" onAction="#atualizacao" opacity="0.7" style="-fx-background-color: GREEN; -fx-background-radius: 5;" text="SINCRONIZAÇÃO ON" textFill="WHITE" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="15.0">
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font></Button>
-                        <VBox alignment="CENTER" fillWidth="false" opacity="0.7" spacing="5.0" style="-fx-background-color: black; -fx-background-radius: 5;" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="15.0">
-                           <children>
-                              <Label text="CAIXAS OFF" textFill="WHITE">
-                                 <font>
-                                    <Font size="18.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="txtCaixasOff" text="?" textFill="WHITE">
-                                 <font>
-                                    <Font name="System Bold" size="24.0" />
-                                 </font>
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </Label>
-                           </children>
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
-                        </VBox>
-                        <HBox fillHeight="false" opacity="0.7" spacing="5.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0">
-                           <children>
-                              <VBox alignment="CENTER" fillWidth="false" spacing="5.0" style="-fx-background-color: black; -fx-background-radius: 5;">
-                                 <children>
-                                    <Label text="USUÁRIOS ONLINE" textFill="WHITE">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </Label>
-                                    <Label fx:id="txtTotalUsuarios" text="?" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="24.0" />
-                                       </font>
-                                       <padding>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </padding>
-                                    </Label>
-                                 </children>
-                                 <HBox.margin>
-                                    <Insets />
-                                 </HBox.margin>
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                              </VBox>
-                              <VBox alignment="CENTER" fillWidth="false" layoutX="10.0" layoutY="10.0" spacing="5.0" style="-fx-background-color: black; -fx-background-radius: 5;">
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                 </padding>
-                                 <children>
-                                    <Label text="CAIXAS ON" textFill="WHITE">
-                                       <font>
-                                          <Font size="18.0" />
-                                       </font>
-                                    </Label>
-                                    <Label fx:id="txtCaixasOn" text="?" textFill="WHITE">
-                                       <font>
-                                          <Font name="System Bold" size="24.0" />
-                                       </font>
-                                       <padding>
-                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                                       </padding>
-                                    </Label>
-                                 </children>
-                              </VBox>
-                           </children>
-                        </HBox>
-                        <Button fx:id="btnMusica" mnemonicParsing="false" onAction="#mutarSom" opacity="0.7" style="-fx-background-color: green; -fx-background-radius: 5;" text="SOM ON" textFill="WHITE" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="15.0">
-                           <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </padding>
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Button>
-                     </children></AnchorPane>
+              <AnchorPane fx:id="apMap1" minHeight="-Infinity" minWidth="-Infinity" prefHeight="664.0" prefWidth="1068.0" />
             </content>
           </Tab>
           <Tab text="Caixas">
@@ -250,6 +267,226 @@
                               </VBox>
                            </children>
                         </HBox>
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Configurações">
+            <content>
+              <AnchorPane fx:id="apCOnfiguracoes" minHeight="-Infinity" minWidth="-Infinity" prefHeight="664.0" prefWidth="1068.0">
+                     <children>
+                        <VBox alignment="TOP_CENTER" prefWidth="250.0" spacing="5.0" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="5.0">
+                           <children>
+                              <VBox alignment="TOP_CENTER" prefWidth="250.0" spacing="5.0" style="-fx-background-color: gray; -fx-background-radius: 5;">
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                                 <children>
+                                    <Circle fill="DODGERBLUE" radius="15.0" stroke="BLACK" strokeType="INSIDE">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </Circle>
+                                    <HBox alignment="TOP_RIGHT" spacing="5.0">
+                                       <children>
+                                          <Label text="Raio: 15">
+                                             <font>
+                                                <Font name="System Bold" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <Slider blockIncrement="5.0" max="50.0" min="5.0" value="15.0" />
+                                       </children>
+                                    </HBox>
+                                    <Label text="Cor On-Line">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox alignment="CENTER" spacing="5.0">
+                                       <children>
+                                          <Circle fill="DODGERBLUE" radius="15.0" stroke="BLACK" strokeType="INSIDE">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </Circle>
+                                          <Circle fill="RED" radius="15.0" stroke="BLACK" strokeType="INSIDE">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </Circle>
+                                          <Circle fill="LIME" radius="15.0" stroke="BLACK" strokeType="INSIDE">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </Circle>
+                                          <Circle fill="WHITE" radius="15.0" stroke="BLACK" strokeType="INSIDE">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </Circle>
+                                          <Circle layoutX="183.0" layoutY="25.0" radius="15.0" stroke="WHITE" strokeType="INSIDE">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </Circle>
+                                       </children>
+                                    </HBox>
+                                    <Label text="Cor Off-Line">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox alignment="CENTER" spacing="5.0">
+                                       <children>
+                                          <Circle fill="DODGERBLUE" radius="15.0" stroke="BLACK" strokeType="INSIDE">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </Circle>
+                                          <Circle fill="RED" radius="15.0" stroke="BLACK" strokeType="INSIDE">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </Circle>
+                                          <Circle fill="LIME" radius="15.0" stroke="BLACK" strokeType="INSIDE">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </Circle>
+                                          <Circle fill="WHITE" radius="15.0" stroke="BLACK" strokeType="INSIDE">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </Circle>
+                                          <Circle layoutX="183.0" layoutY="25.0" radius="15.0" stroke="WHITE" strokeType="INSIDE">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </Circle>
+                                       </children>
+                                    </HBox>
+                                    <Button mnemonicParsing="false" text="Aplicar">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </Button>
+                                 </children>
+                              </VBox>
+                              <VBox alignment="TOP_CENTER" layoutX="15.0" layoutY="230.0" prefWidth="250.0" spacing="5.0" style="-fx-background-color: gray; -fx-background-radius: 5;">
+                                 <children>
+                                    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="30.0" stroke="BLACK" strokeType="INSIDE" width="25.0">
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </Rectangle>
+                                    <HBox alignment="TOP_RIGHT" spacing="5.0">
+                                       <children>
+                                          <Label text="Altura: 30">
+                                             <font>
+                                                <Font name="System Bold" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <Slider blockIncrement="5.0" min="5.0" value="30.0" />
+                                       </children>
+                                    </HBox>
+                                    <HBox alignment="TOP_RIGHT" layoutX="15.0" layoutY="50.0" spacing="5.0">
+                                       <children>
+                                          <Label text="Largura: 25">
+                                             <font>
+                                                <Font name="System Bold" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <Slider blockIncrement="5.0" min="5.0" value="25.0" />
+                                       </children>
+                                    </HBox>
+                                    <Label text="Cor On-Line">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox alignment="CENTER" spacing="5.0">
+                                       <children>
+                                          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="30.0" stroke="BLACK" strokeType="INSIDE" width="25.0">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </Rectangle>
+                                          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="RED" height="30.0" layoutX="48.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="25.0">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </Rectangle>
+                                          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="LIME" height="30.0" layoutX="80.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="25.0">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </Rectangle>
+                                          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="30.0" layoutX="113.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="25.0">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </Rectangle>
+                                          <Rectangle arcHeight="5.0" arcWidth="5.0" height="30.0" layoutX="198.0" layoutY="10.0" stroke="WHITE" strokeType="INSIDE" width="25.0">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </Rectangle>
+                                       </children>
+                                    </HBox>
+                                    <Label layoutX="124.0" layoutY="100.0" text="Cor Off-Line">
+                                       <font>
+                                          <Font name="System Bold" size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <HBox alignment="CENTER" layoutX="15.0" layoutY="125.0" spacing="5.0">
+                                       <children>
+                                          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="30.0" stroke="BLACK" strokeType="INSIDE" width="25.0">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </Rectangle>
+                                          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="RED" height="30.0" layoutX="48.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="25.0">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </Rectangle>
+                                          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="LIME" height="30.0" layoutX="80.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="25.0">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </Rectangle>
+                                          <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="30.0" layoutX="113.0" layoutY="10.0" stroke="BLACK" strokeType="INSIDE" width="25.0">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </Rectangle>
+                                          <Rectangle arcHeight="5.0" arcWidth="5.0" height="30.0" layoutX="198.0" layoutY="10.0" stroke="WHITE" strokeType="INSIDE" width="25.0">
+                                             <cursor>
+                                                <Cursor fx:constant="HAND" />
+                                             </cursor>
+                                          </Rectangle>
+                                       </children>
+                                    </HBox>
+                                    <Button mnemonicParsing="false" text="Aplicar">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                       <cursor>
+                                          <Cursor fx:constant="HAND" />
+                                       </cursor>
+                                    </Button>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </VBox>
+                           </children>
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                        </VBox>
                      </children></AnchorPane>
             </content>
           </Tab>

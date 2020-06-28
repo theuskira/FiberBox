@@ -7,7 +7,12 @@ import fiberbox.model.CaixaDAO;
 import fiberbox.model.Estatico;
 import fiberbox.model.UsuarioDAO;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URL;
+import java.net.UnknownHostException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -32,18 +37,20 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
+import me.legrange.mikrotik.MikrotikApiException;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 /**
@@ -53,16 +60,25 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public class FXMLDocumentController implements Initializable {
 
     @FXML
-    private AnchorPane apMap1;
-
+    private BorderPane bpPrincipal;
+    
     @FXML
-    private ImageView background1;
+    private AnchorPane apMap1;
+//
+//    @FXML
+//    private ImageView background1;
 
     @FXML
     private Label txtTotalUsuarios;
 
     @FXML
     private Label txtCaixasOn;
+    
+    @FXML
+    private Label txtUsuario;
+    
+    @FXML
+    private Label txtStatusSistema;
 
     @FXML
     private Label txtCaixasOff;
@@ -78,7 +94,6 @@ public class FXMLDocumentController implements Initializable {
 
     private List<Map<String, String>> usuarios;
 
-    private Boolean sistemaOn = false;
     private Boolean atualizar = true;
 
     private Boolean musicaOn = true;
@@ -132,16 +147,39 @@ public class FXMLDocumentController implements Initializable {
         ApiContextInitializer.init();
 
         TelegramBotsApi botsApi = new TelegramBotsApi();
-
+        
         try {
-            botsApi.registerBot(new FiberBoxBot());
+            
+            FiberBoxBot fiberBoxBot = new FiberBoxBot();
+            
+            botsApi.registerBot(fiberBoxBot);
+            
+            System.out.println("BOT ////////////");
+            
+            System.out.println("BOT User Name: " + fiberBoxBot.getBotUsername());
+            
+            System.out.println("NOME MAQUINA: " + InetAddress.getLocalHost().getHostName());
+            System.out.println("IP MAQUINA: " + InetAddress.getLocalHost().getHostAddress());
+            
+            //System.out.println("BOT User Name: " + fiberBoxBot.se);
+            
+            Message message = new Message();
+            
+            message.setForwardSenderName("");
+            
         } catch (TelegramApiException e) {
             System.err.println("Erro: " + e.getMessage());
+        } catch (UnknownHostException ex) {
+            Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         // TODO
-        background1.fitWidthProperty().bind(apMap1.widthProperty());
-        background1.fitHeightProperty().bind(apMap1.heightProperty());
+        //background1.fitWidthProperty().bind(apMap1.widthProperty());
+        //background1.fitHeightProperty().bind(apMap1.heightProperty());
+        
+        apMap1.setStyle(""
+                + "-fx-background-image: url(\"fiberbox/img/background1.png\");"
+                + "-fx-background-size: 100% 100%;");
 
         try {
 
@@ -175,7 +213,7 @@ public class FXMLDocumentController implements Initializable {
             txtCaixasPesquisarCx.setText("");
         });
 
-        background1.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
+        apMap1.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
 
@@ -223,7 +261,18 @@ public class FXMLDocumentController implements Initializable {
 
         iniciarTabelaCaixas();
         
-        animationTimer.start();
+        Thread t1 = new Thread() {
+
+            @Override
+            public void run() {
+
+                animationTimer.start();
+
+            }
+
+        };
+
+        t1.start();
         
         try {
             Thread t = new Thread() {
@@ -325,14 +374,15 @@ public class FXMLDocumentController implements Initializable {
         System.out.println("** INICIANDO CONEXAO");
 
         try {
-
-            usuarios = new ConexaoMK().lista("10.10.11.1", "fibermap", "pw123456");
-
-            sistemaOn = true;
+            
+            //if(Estatico.getStatusSistema()){
+                
+                usuarios = new ConexaoMK().lista(Estatico.getIp(), Estatico.getPorta(), Estatico.getUsuario(), Estatico.getSenha());
+            //}
 
             //System.out.println("** SISTEMA CONECTADO");
 
-        } catch (Exception e) {
+        } catch (MikrotikApiException e) {
 
             System.err.println("Erro: " + e.getMessage());
 
@@ -342,11 +392,9 @@ public class FXMLDocumentController implements Initializable {
             dialogoInfo.setContentText("Erro: " + e.getMessage());
             dialogoInfo.showAndWait();
 
-            sistemaOn = false;
-
         } finally {
 
-            if (sistemaOn && usuarios != null) {
+            if (usuarios != null) {
 
                 System.out.println("Usuário(s): " + usuarios.size());
                 Estatico.setTotalUsuarios(usuarios.size());
@@ -388,9 +436,12 @@ public class FXMLDocumentController implements Initializable {
         Estatico.getListaCaixasOn().clear();
         int caixasOff = 0;
         Estatico.getListaCaixasOff().clear();
+        
+        Estatico.getListaCaixasCircle().clear();
 
         for (Caixa c : caixa) {
 
+            Circle circle = new Circle();
             boolean caixaOn = false;
 
             for (Map<String, String> entry : usuarios) {
@@ -426,15 +477,114 @@ public class FXMLDocumentController implements Initializable {
                 caixasOnline++;
                 c.setOnline(true);
                 Estatico.setListaCaixasOn(c);
+                circle.setFill(Paint.valueOf("BLUE"));
             } else {
                 c.setOnline(false);
                 Estatico.setListaCaixasOff(c);
                 caixasOff++;
+                circle.setFill(Paint.valueOf("RED"));
             }
+            
+            if (caixaOn) {
+
+                //c.setOnline(true);
+                //Estatico.setListaCaixasOn(c);
+            } else {
+                //c.setOnline(false);
+                //Estatico.setListaCaixasOff(c);
+            }
+
+            circle.setCenterX(c.getX());
+            circle.setCenterY(c.getY());
+            circle.setRadius(10.0f);
+            circle.setCursor(Cursor.HAND);
+            circle.setStroke(Paint.valueOf("Black"));
+            
+            circle.setOnMouseEntered((event) -> {
+                
+                animationTimer.stop();
+                
+                circle.setOnMousePressed((e) -> {
+                        
+                    circle.setCursor(Cursor.MOVE);
+                    
+                    if(e.getEventType().equals(MouseEvent.MOUSE_MOVED)){
+                        
+                        circle.setCenterX(e.getSceneX());
+                        circle.setCenterY(e.getSceneY() - 52);
+                        
+                        
+                        System.out.println("MOVENDO CAIXA");
+                        
+                        txtSistema.setText("Movendo");
+                        
+                    }
+                
+                });
+                
+                String usuarios1 = "";
+                if (c.getUsuario1() != null && !c.getUsuario1().isEmpty()) {
+                    usuarios1 += c.getUsuario1() + "\n";
+                }
+                if (c.getUsuario2() != null && !c.getUsuario2().isEmpty()) {
+                    usuarios1 += c.getUsuario2() + "\n";
+                }
+                if (c.getUsuario3() != null && !c.getUsuario3().isEmpty()) {
+                    usuarios1 += c.getUsuario3() + "\n";
+                }
+                if (c.getUsuario4() != null && !c.getUsuario4().isEmpty()) {
+                    usuarios1 += c.getUsuario4() + "\n";
+                }
+                if (c.getUsuario5() != null && !c.getUsuario5().isEmpty()) {
+                    usuarios1 += c.getUsuario5() + "\n";
+                }
+                if (c.getUsuario6() != null && !c.getUsuario6().isEmpty()) {
+                    usuarios1 += c.getUsuario6() + "\n";
+                }
+                if (c.getUsuario7() != null && !c.getUsuario7().isEmpty()) {
+                    usuarios1 += c.getUsuario7() + "\n";
+                }
+                if (c.getUsuario8() != null && !c.getUsuario8().isEmpty()) {
+                    usuarios1 += c.getUsuario8() + "\n";
+                }
+
+                txtSistema.setText("CAIXA\n"
+                        + c.getCodigo()
+                        + "\n" + usuarios1
+                        + "\n" + "LOCALIZAÇÃO\n"
+                        + c.getEndereco() + "\n"
+                                + "X: " + c.getX()
+                        + " | Y: " + c.getY());
+                
+            });
+            
+            circle.setOnMouseExited((event) -> {
+                if(atualizar){
+                    animationTimer.start();
+                }
+            });
+
+            circle.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(javafx.scene.input.MouseEvent event) {
+                    if (event.getButton().equals(MouseButton.PRIMARY)) {
+                        
+                        System.out.println("EDITAR CAIXA");
+                        
+                        Estatico.setEditarCaixa(true);
+                        Estatico.setCaixa(c);
+                        
+                        cadastrarCaixa();
+                        
+                    }
+                }
+            });
 
             caixasEncontradas++;
 
             Estatico.getListaCaixas().add(c);
+            
+            Estatico.setListaCaixasCircle(circle);
 
         }
 
@@ -504,24 +654,48 @@ public class FXMLDocumentController implements Initializable {
         @Override
         public void handle(long currentNanoTime) {
             
-            if (currentNanoTime - 500 > 1_000_000_000) {
+            //if (currentNanoTime - 500 > 1_000_000_000) {
                 
                 try {
 
                     //System.out.println("** ATUALIZANDO GUI");
-
+                    
+                    if(Estatico.getStatusSistema() != null){
+                        
+                        txtUsuario.setText(Estatico.getUsuario() + "@" + Estatico.getIp() + ":" + Estatico.getPorta());
+                        
+                        if(Estatico.getStatusSistema()){
+                            
+                            txtStatusSistema.setText("Status do Sistema: On-Line!");
+                            txtStatusSistema.setStyle("-fx-background-color: black;"
+                                    + " -fx-text-fill: white;"
+                                    + " -fx-background-radius: 5;");
+                            
+                        }else{
+                            
+                            txtStatusSistema.setText("Status do Sistema: Off-Line!");
+                            txtStatusSistema.setStyle("-fx-background-color: black;"
+                                    + " -fx-text-fill: red;"
+                                    + " -fx-background-radius: 5;");
+                            
+                        }
+                        
+                    }
+                    
                     if(usuarios != null){
 
-                        System.out.println("USUARIOS NAO NULOS");
+                        //System.out.println("USUARIOS NAO NULOS");
+                        
+                        apMap1.getChildren().clear();
 
                         txtTotalUsuarios.setText(String.valueOf(usuarios.size()));
 
                         txtCaixasOn.setText(String.valueOf(Estatico.getCaixasOn()));
 
-                        System.out.println("CAIXAS ON: " + Estatico.getCaixasOn());
+                        //System.out.println("CAIXAS ON: " + Estatico.getCaixasOn());
 
                         txtCaixasOff.setText(String.valueOf(Estatico.getCaixasOff()));
-                        System.out.println("CAIXAS OFF: " + Estatico.getCaixasOff());
+                        //System.out.println("CAIXAS OFF: " + Estatico.getCaixasOff());
 
                         txtSistema.setText(Estatico.getCaixasEncontradas() + " caixa(s) encontradas!");
                         txtSistema.setStyle("-fx-background-color: white;"
@@ -556,109 +730,22 @@ public class FXMLDocumentController implements Initializable {
 
                         }
 
-                        Estatico.getListaCaixas().stream().map((c) -> {
-
-                            Circle circle = new Circle();
-                            boolean caixaOn = false;
-
-                            for (Map<String, String> entry : usuarios) {
-
-                                if (entry.containsValue("<pppoe-" + c.getUsuario1() + ">")) {
-                                    caixaOn = true;
-                                }
-                                if (entry.containsValue("<pppoe-" + c.getUsuario2() + ">")) {
-                                    caixaOn = true;
-                                }
-                                if (entry.containsValue("<pppoe-" + c.getUsuario3() + ">")) {
-                                    caixaOn = true;
-                                }
-                                if (entry.containsValue("<pppoe-" + c.getUsuario4() + ">")) {
-                                    caixaOn = true;
-                                }
-                                if (entry.containsValue("<pppoe-" + c.getUsuario5() + ">")) {
-                                    caixaOn = true;
-                                }
-                                if (entry.containsValue("<pppoe-" + c.getUsuario6() + ">")) {
-                                    caixaOn = true;
-                                }
-                                if (entry.containsValue("<pppoe-" + c.getUsuario7() + ">")) {
-                                    caixaOn = true;
-                                }
-                                if (entry.containsValue("<pppoe-" + c.getUsuario8() + ">")) {
-                                    caixaOn = true;
-                                }
-
-                            }
-
-                            if (caixaOn) {
-                                circle.setFill(Paint.valueOf("BLUE"));
-                                //c.setOnline(true);
-                                //Estatico.setListaCaixasOn(c);
-                            } else {
-                                circle.setFill(Paint.valueOf("RED"));
-                                //c.setOnline(false);
-                                //Estatico.setListaCaixasOff(c);
-                            }
-
-                            circle.setCenterX(c.getX());
-                            circle.setCenterY(c.getY());
-                            circle.setRadius(10.0f);
-                            circle.setCursor(Cursor.HAND);
-
-                            circle.setOnMouseClicked((javafx.scene.input.MouseEvent event) -> {
-                                String usuarios1 = "";
-                                if (c.getUsuario1() != null && !c.getUsuario1().isEmpty()) {
-                                    usuarios1 += c.getUsuario1() + "\n";
-                                }
-                                if (c.getUsuario2() != null && !c.getUsuario2().isEmpty()) {
-                                    usuarios1 += c.getUsuario2() + "\n";
-                                }
-                                if (c.getUsuario3() != null && !c.getUsuario3().isEmpty()) {
-                                    usuarios1 += c.getUsuario3() + "\n";
-                                }
-                                if (c.getUsuario4() != null && !c.getUsuario4().isEmpty()) {
-                                    usuarios1 += c.getUsuario4() + "\n";
-                                }
-                                if (c.getUsuario5() != null && !c.getUsuario5().isEmpty()) {
-                                    usuarios1 += c.getUsuario5() + "\n";
-                                }
-                                if (c.getUsuario6() != null && !c.getUsuario6().isEmpty()) {
-                                    usuarios1 += c.getUsuario6() + "\n";
-                                }
-                                if (c.getUsuario7() != null && !c.getUsuario7().isEmpty()) {
-                                    usuarios1 += c.getUsuario7() + "\n";
-                                }
-                                if (c.getUsuario8() != null && !c.getUsuario8().isEmpty()) {
-                                    usuarios1 += c.getUsuario8() + "\n";
-                                }
-
-                                txtSistema.setText("CAIXA\n"
-                                        + c.getCodigo()
-                                        + "\n" + usuarios1
-                                        + "\n" + "LOCALIZACAO\n"
-                                        + c.getEndereco() + "\n"
-                                                + "X: " + c.getX()
-                                        + " - Y: " + c.getY());
-
-                                if (event.getButton().equals(MouseButton.PRIMARY)) {
-                                    if (event.getClickCount() == 2) {
-
-                                        System.out.println("EDITAR CAIXA");
-
-                                        Estatico.setEditarCaixa(true);
-                                        Estatico.setCaixa(c);
-
-                                        cadastrarCaixa();
-
-                                    }
-                                }
-
-                            });
-                            return circle;
-                        }).forEachOrdered((circle) -> {
-                            apMap1.getChildren().add(
-                                    circle
-                            );
+                        Estatico.getListaCaixasCircle().forEach((c) -> {
+                            
+                            //c.setCenterX((apMap1.getHeight() * 0.5) - c.getCenterX());
+                            
+//                            System.out.println(apMap1.getHeight()); //  ALTURA
+//                            
+//                            double x = c.getCenterX();
+//                            double y = c.getCenterY();
+//                            
+//                            c.setCenterX(apMap1.getWidth() / x * 2);
+//                            c.setCenterY((apMap1.getWidth() - y) * 0.5);
+//                            
+//                            System.out.println(apMap1.getWidth()); // LARGURA
+                            
+                            apMap1.getChildren().add(c);
+                                
                         });
                     }
 
@@ -676,7 +763,7 @@ public class FXMLDocumentController implements Initializable {
 //                    dialogoInfo.showAndWait();
                 }
                 
-            }
+            //}
 
         }
     };
@@ -743,16 +830,18 @@ public class FXMLDocumentController implements Initializable {
         Estatico.setCaixa(cx);
 
         if (event.getButton().equals(MouseButton.PRIMARY)) {
-            if (event.getClickCount() == 2) {
 
+            if (event.getClickCount() == 2) {
+                
                 System.out.println("EDITAR CAIXA");
 
                 Estatico.setEditarCaixa(true);
                 Estatico.setCaixa(cx);
 
                 cadastrarCaixa();
-
+                
             }
+            
         }
 
     }
@@ -775,6 +864,13 @@ public class FXMLDocumentController implements Initializable {
 
         apagarCaixa();
 
+    }
+    
+    // RETORNA A DATA DO SISTEMA
+    public static final String getDateTime() {
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = new Date();
+        return dateFormat.format(date);
     }
 
 }

@@ -34,11 +34,9 @@ public class FiberBoxBot extends TelegramLongPollingBot{
                             "Caixas Off-Line: <b>" + Estatico.getCaixasOff()+ "</b>\n\n" +
                             "<b>COMANDOS DISPONÍVEIS</b>\n" +
                             "/status - Status do Sistema\n" +
-                            "/caixas_on - Número de Caixas On\n" +
-                            "/caixas_off - Número de Caixas Off\n" +
                             "/total_usuarios - Total de Usuários\n" +
-                            "/listar_caixas_off - Listar Caixas Off\n" +
-                            "/listar_caixas_on - Listar Caixas On");
+                            "/caixas_off - Listar Caixas Off\n" +
+                            "/caixas_on - Listar Caixas On");
                     break;
                     
                 case "/status":
@@ -50,22 +48,12 @@ public class FiberBoxBot extends TelegramLongPollingBot{
                     
                     break;
                     
-                case "/caixas_on":
-                    
-                    message.setText(Estatico.getCaixasOn() + " caixa(s) On-Line");
-                    break;
-
-                case "/caixas_off":
-                    
-                    message.setText(Estatico.getCaixasOff() + " caixa(s) Off-Line");
-                    break;
-                    
                 case "/total_usuarios":
                     
                     message.setText(Estatico.getTotalUsuarios()+ " usuário(s) On-Line");
                     break;
                     
-                case "/listar_caixas_off":
+                case "/caixas_off":
                     
                     if(Estatico.getCaixasOff() > 0){
                         
@@ -115,7 +103,7 @@ public class FiberBoxBot extends TelegramLongPollingBot{
                     
                 break;    
                 
-                case "/listar_caixas_on":
+                case "/caixas_on":
                     
                     String listaCaixasOn = "<b>Caixa(s) On-Line: " + Estatico.getCaixasOn() +"</b>";
                     
@@ -161,11 +149,9 @@ public class FiberBoxBot extends TelegramLongPollingBot{
                     
                     message.setText("<b>COMANDOS DISPONÍVEIS</b>\n" +
                             "/status - Status do Sistema\n" +
-                            "/caixas_on - Número de Caixas On\n" +
-                            "/caixas_off - Número de Caixas Off\n" +
                             "/total_usuarios - Total de Usuários\n" +
-                            "/listar_caixas_off - Listar Caixas Off\n" +
-                            "/listar_caixas_on - Listar Caixas On");
+                            "/caixas_off - Listar Caixas Off\n" +
+                            "/caixas_on - Listar Caixas On");
                     
                     break;
                         

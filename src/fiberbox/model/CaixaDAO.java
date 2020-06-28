@@ -213,7 +213,7 @@ public class CaixaDAO {
                         rs.getDouble(("y"))
                     );
                 
-                System.out.println("* Caixa encontrada: " + c.getCodigo());
+                //System.out.println("* Caixa encontrada: " + c.getCodigo());
                 
                 listaCaixas.add(c);
                 
@@ -229,7 +229,7 @@ public class CaixaDAO {
             
         }
         
-        System.out.println("* " + listaCaixas.size() + " Caixas encontradas!");
+        //System.out.println("* " + listaCaixas.size() + " Caixas encontradas!");
         
         return listaCaixas;
         

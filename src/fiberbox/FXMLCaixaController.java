@@ -144,6 +144,7 @@ public class FXMLCaixaController implements Initializable {
     private void verificar(){
         
         int erro = 0;
+        String erro1 = "";
         
         Caixa caixa = new Caixa();
         
@@ -151,6 +152,9 @@ public class FXMLCaixaController implements Initializable {
             
             erro ++;
             txtCodigo.requestFocus();
+            
+            System.err.println("Erro Codigo");
+            erro1 += "Erro Codigo\n";
             
         }else{
             
@@ -163,6 +167,9 @@ public class FXMLCaixaController implements Initializable {
             erro ++;
             txtLocalizacao.requestFocus();
             
+            System.err.println("Erro Localização");
+            erro1 += "Erro Localização\n";
+            
         }else{
             
             caixa.setEndereco(txtLocalizacao.getText());
@@ -174,6 +181,9 @@ public class FXMLCaixaController implements Initializable {
             erro ++;
             txtX.requestFocus();
             
+            System.err.println("Erro X");
+            erro1 += "Erro X\n";
+            
         }else{
             
             caixa.setX(Double.parseDouble(txtX.getText()));
@@ -184,6 +194,9 @@ public class FXMLCaixaController implements Initializable {
             
             erro ++;
             txtY.requestFocus();
+            
+            System.err.println("Erro Y");
+            erro1 += "Erro Y\n";
             
         }else{
             
@@ -203,6 +216,9 @@ public class FXMLCaixaController implements Initializable {
             erro ++;
             txtPpoe1.requestFocus();
             
+            System.err.println("Erro PPoE");
+            erro1 += "Erro PPoE\n";
+            
         }
         
         caixa.setUsuario1(txtPpoe1.getText());
@@ -216,11 +232,11 @@ public class FXMLCaixaController implements Initializable {
         
         if(erro > 0){
             
-            System.out.println("ERRO");
+            System.err.println(erro + " erro(s) encontrado(s)!");
             Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
             dialogoInfo.setTitle("Informação");
-            dialogoInfo.setHeaderText("Erro!");
-            dialogoInfo.setContentText(erro + " erro(s) encontrado(s)!");
+            dialogoInfo.setHeaderText(erro + " erro(s) encontrado(s)!");
+            dialogoInfo.setContentText(erro1);
             dialogoInfo.initOwner(btnSalvar.getScene().getWindow());
             dialogoInfo.showAndWait();
             
@@ -250,13 +266,13 @@ public class FXMLCaixaController implements Initializable {
                     Alert dialogoInfo = new Alert(Alert.AlertType.INFORMATION);
                     dialogoInfo.setTitle("Informação");
                     dialogoInfo.setHeaderText("Sucesso!");
-                    dialogoInfo.setContentText(codigoAnterior + " cadastrada!");
+                    dialogoInfo.setContentText(caixa.getCodigo() + " cadastrada!");
                     dialogoInfo.showAndWait();
                 }else{
                     Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
                     dialogoInfo.setTitle("Informação");
                     dialogoInfo.setHeaderText("Erro!");
-                    dialogoInfo.setContentText(codigoAnterior + " não cadastrada!");
+                    dialogoInfo.setContentText(caixa.getCodigo() + " não cadastrada!");
                     dialogoInfo.showAndWait();
                 }
                 
