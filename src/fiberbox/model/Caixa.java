@@ -3,7 +3,7 @@ package fiberbox.model;
 public class Caixa {
     
     private String codigo, endereco, usuario1, usuario2, usuario3,
-            usuario4, usuario5, usuario6, usuario7, usuario8;
+            usuario4, usuario5, usuario6, usuario7, usuario8, ramal;
     
     private Double x, y;
     
@@ -20,6 +20,7 @@ public class Caixa {
             String usuario6,
             String usuario7,
             String usuario8, 
+            String ramal, 
             Double x,
             Double y) {
         
@@ -33,6 +34,7 @@ public class Caixa {
         this.usuario6 = usuario6;
         this.usuario7 = usuario7;
         this.usuario8 = usuario8;
+        this.ramal = ramal;
         this.x = x;
         this.y = y;
         
@@ -143,6 +145,14 @@ public class Caixa {
 
     public void setOnline(Boolean online) {
         this.online = online;
+    }
+
+    public String getRamal() {
+        return ramal;
+    }
+
+    public void setRamal(String ramal) {
+        this.ramal = ramal;
     }
     
     

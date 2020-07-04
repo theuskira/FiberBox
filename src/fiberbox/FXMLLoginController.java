@@ -1,6 +1,7 @@
 package fiberbox;
 
 import fiberbox.configuracao.ConexaoMK;
+import fiberbox.model.CaixaDAO;
 import fiberbox.model.Configuracao;
 import fiberbox.model.ConfiguracaoDAO;
 import fiberbox.model.Estatico;
@@ -57,6 +58,15 @@ public class FXMLLoginController implements Initializable {
         
         //new ConfiguracaoDAO().droparTabela();
         new ConfiguracaoDAO().verificarTabela();
+        new RamalDAO().verificarTabela();
+        
+        //Ramal ramal = new Ramal("Cândido Mendes - MA", "10.10.11.1", "pw123456", 8791, "fiberbox", "\"fiberbox/img/background1.png\"");
+        //Ramal ramal = new Ramal("Godofredo Viana - MA", "10.10.11.1", "pw123456", 8791, "fiberbox", "\"fiberbox/img/background1.png\"");
+        //new RamalDAO().inserir(ramal);
+        
+//        if(new CaixaDAO().alterarTabela()){
+//            System.out.println("SUCESSO AO ALTERAR RAMAL!!!");
+//        }
         
         btnEntrar.setOnAction((event) -> {
             try {

@@ -42,7 +42,7 @@
             <VBox alignment="CENTER" layoutX="15.0" layoutY="15.0" spacing="5.0" style="-fx-background-color: gray; -fx-background-radius: 5;">
                <children>
                   <Label text="IP/Servidor" />
-                  <TextField editable="false" promptText="10.0.0.1" />
+                  <TextField promptText="10.0.0.1" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
@@ -51,7 +51,7 @@
             <VBox alignment="CENTER" layoutX="15.0" layoutY="77.0" spacing="5.0" style="-fx-background-color: gray; -fx-background-radius: 5;">
                <children>
                   <Label text="Porta" />
-                  <TextField editable="false" promptText="8728" text="8728" />
+                  <TextField promptText="8728" text="8728" />
                </children>
                <padding>
                   <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

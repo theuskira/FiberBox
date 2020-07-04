@@ -254,4 +254,33 @@ public class RamalDAO {
         
     }
     
+    public boolean alterarTabela(){
+        
+        System.out.println("** ALTERAR TABELA **");
+        
+        boolean retorno = false;
+        
+        try {
+            
+            stmt = con.prepareStatement("ALTER TABLE ramal ADD ramal = ?;");
+            stmt.setString(1, "Cândido Mendes - MA");
+            
+            stmt.execute();
+            
+            retorno = true;
+            
+        } catch (SQLException e) {
+            
+            System.err.println("Erro ao alterar a tabela: " + e.getMessage());
+            
+        }finally{
+            
+            ConexaoSQLite.closeConnection(con, stmt);
+            
+        }
+        
+        return retorno;
+        
+    }
+    
 }

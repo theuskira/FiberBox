@@ -5,11 +5,8 @@
         <group>
             <file>file:/C:/Users/Matheus%20-%20DELL/Documents/NetBeansProjects/FiberBox/src/fiberbox/FXMLConfiguracoesController.java</file>
             <file>file:/C:/Users/Matheus%20-%20DELL/Documents/NetBeansProjects/FiberBox/src/fiberbox/FXMLDocumentController.java</file>
-            <file>file:/C:/Users/Matheus%20-%20DELL/Documents/NetBeansProjects/FiberBox/src/fiberbox/configuracao/ConexaoMK.java</file>
-            <file>file:/C:/Users/Matheus%20-%20DELL/Documents/NetBeansProjects/FiberBox/src/fiberbox/model/ConfiguracaoDAO.java</file>
-            <file>file:/C:/Users/Matheus%20-%20DELL/Documents/NetBeansProjects/FiberBox/src/fiberbox/FXMLConfiguracoes.fxml</file>
+            <file>file:/C:/Users/Matheus%20-%20DELL/Documents/NetBeansProjects/FiberBox/src/fiberbox/model/CaixaDAO.java</file>
             <file>file:/C:/Users/Matheus%20-%20DELL/Documents/NetBeansProjects/FiberBox/src/fiberbox/FXMLLoginController.java</file>
-            <file>file:/C:/Users/Matheus%20-%20DELL/Documents/NetBeansProjects/FiberBox/src/fiberbox/model/Configuracao.java</file>
         </group>
     </open-files>
 </project-private>

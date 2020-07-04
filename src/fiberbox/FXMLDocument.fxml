@@ -2,7 +2,12 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -171,8 +176,56 @@
          </children></VBox>
    </right>
    <center>
-      <TabPane prefHeight="693.0" prefWidth="1078.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+      <TabPane fx:id="tPanePrincipal" prefHeight="693.0" prefWidth="1078.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
+          <Tab closable="false" text="Geral">
+            <content>
+              <AnchorPane fx:id="apCaixas" minHeight="-Infinity" minWidth="-Infinity" prefHeight="664.0" prefWidth="1078.0">
+                     <children>
+                        <HBox alignment="TOP_CENTER" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <padding>
+                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                           </padding>
+                           <children>
+                              <VBox alignment="TOP_CENTER">
+                                 <children>
+                                    <BarChart fx:id="bChartQuedaRamal" title="QUEDAS POR RAMAL">
+                                      <xAxis>
+                                        <CategoryAxis side="BOTTOM" />
+                                      </xAxis>
+                                      <yAxis>
+                                        <NumberAxis side="LEFT" />
+                                      </yAxis>
+                                    </BarChart>
+                                 </children>
+                              </VBox>
+                              <VBox alignment="TOP_RIGHT" layoutX="1054.0" layoutY="15.0" spacing="5.0">
+                                 <children>
+                                    <LineChart fx:id="lChartQuedaRamal" title="QUEDAS NO ÚLTIMO MÊS">
+                                      <xAxis>
+                                        <CategoryAxis side="BOTTOM" />
+                                      </xAxis>
+                                      <yAxis>
+                                        <NumberAxis side="LEFT" />
+                                      </yAxis>
+                                    </LineChart>
+                                    <HBox alignment="CENTER_RIGHT" spacing="5.0">
+                                       <children>
+                                          <Label text="SELECIONAR RAMAL">
+                                             <font>
+                                                <Font name="System Bold" size="14.0" />
+                                             </font>
+                                          </Label>
+                                          <ComboBox fx:id="cBoxRamal" prefWidth="150.0" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                           </children>
+                        </HBox>
+                     </children></AnchorPane>
+            </content>
+          </Tab>
           <Tab text="Cândido Mendes">
             <content>
               <AnchorPane fx:id="apMap1" minHeight="-Infinity" minWidth="-Infinity" prefHeight="664.0" prefWidth="1068.0" />

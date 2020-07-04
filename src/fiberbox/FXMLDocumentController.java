@@ -5,6 +5,8 @@ import fiberbox.configuracao.FiberBoxBot;
 import fiberbox.model.Caixa;
 import fiberbox.model.CaixaDAO;
 import fiberbox.model.Estatico;
+import fiberbox.model.Ramal;
+import fiberbox.model.RamalDAO;
 import fiberbox.model.UsuarioDAO;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -12,6 +14,7 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +34,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -64,6 +70,13 @@ public class FXMLDocumentController implements Initializable {
     
     @FXML
     private AnchorPane apMap1;
+    
+    @FXML
+    private TabPane tPanePrincipal;
+    
+    @FXML
+    private ComboBox<String> cBoxRamal;
+    
 //
 //    @FXML
 //    private ImageView background1;
@@ -139,6 +152,8 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private Button btnCaixasPesquisarCxCancelar;
+    
+    private List<AnchorPane> apList = new ArrayList<>();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -176,6 +191,22 @@ public class FXMLDocumentController implements Initializable {
         // TODO
         //background1.fitWidthProperty().bind(apMap1.widthProperty());
         //background1.fitHeightProperty().bind(apMap1.heightProperty());
+        
+        // TODO - Verificar Ramais e Inserilos na Lista!
+        
+        List<Ramal> ramais = new RamalDAO().listar();
+        
+        for(Ramal r : ramais ){
+            
+            AnchorPane a = new AnchorPane();
+            
+            a.setStyle(""
+                + "-fx-background-image: url(" + r.getCaminhoFoto() + ");"
+                + "-fx-background-size: 100% 100%;");
+            
+            apList.add(a);
+            
+        }
         
         apMap1.setStyle(""
                 + "-fx-background-image: url(\"fiberbox/img/background1.png\");"
@@ -224,7 +255,7 @@ public class FXMLDocumentController implements Initializable {
 
                         System.out.println("CRIAR/ALTERAR CAIXA");
                         Estatico.setCaixa(
-                                new Caixa("", "", "", "", "", "", "", "", "", "", event.getX(), event.getY())
+                                new Caixa("", "", "", "", "", "", "", "", "", "", "", event.getX(), event.getY())
                         );
 
                         Estatico.setEditarCaixa(false);
@@ -258,7 +289,9 @@ public class FXMLDocumentController implements Initializable {
         //new UsuarioDAO().droparTabela();
         new CaixaDAO().verificarTabela();
         new UsuarioDAO().verificarDados();
-
+        
+        iniciarRamais();
+        
         iniciarTabelaCaixas();
         
         Thread t1 = new Thread() {
@@ -765,6 +798,7 @@ public class FXMLDocumentController implements Initializable {
 //                            System.out.println(apMap1.getWidth()); // LARGURA
                             
                             apMap1.getChildren().add(c);
+                            
                                 
                         });
                     }
@@ -941,9 +975,52 @@ public class FXMLDocumentController implements Initializable {
             Alert dialogoInfo = new Alert(Alert.AlertType.ERROR);
             dialogoInfo.setTitle("Informação");
             dialogoInfo.setHeaderText("Erro!");
-            dialogoInfo.setContentText("Erro: " + e.getMessage());
+            dialogoInfo.setContentText(e.getMessage());
             dialogoInfo.showAndWait();
 
+        }
+        
+    }
+    
+    private List<String> ramais = new ArrayList<>();
+    
+    private ObservableList<String>  obsCaixa;
+    
+    private void iniciarRamais(){
+        
+        try {
+            
+            String r = "";
+        
+            int i = new RamalDAO().listar().size();
+
+            for(int j = 0 ; j < i; j++){
+                
+                r = new RamalDAO().listar().get(j).getNome();
+                
+                if(!ramais.equals(r)){
+                    
+                    ramais.add(new RamalDAO().listar().get(j).getNome());
+                    
+                    Tab t = new Tab(ramais.get(j));
+                    t.setContent(apList.get(j));
+                    
+                    tPanePrincipal.getTabs().add(t);
+                    
+                }
+                
+                obsCaixa = FXCollections.observableArrayList(ramais);
+
+                cBoxRamal.setItems(obsCaixa);
+
+                
+                
+            }
+            
+        } catch (Exception e) {
+            
+            System.err.println(e.getMessage());
+            
         }
         
     }

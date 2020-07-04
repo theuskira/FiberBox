@@ -3,7 +3,6 @@ package fiberbox.configuracao;
 import fiberbox.model.Estatico;
 import java.util.List;
 import java.util.Map;
-import javax.net.ssl.SSLSocketFactory;
 import me.legrange.mikrotik.ApiConnection;
 import me.legrange.mikrotik.ApiConnectionException;
 import me.legrange.mikrotik.MikrotikApiException;

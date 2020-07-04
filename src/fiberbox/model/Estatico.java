@@ -15,6 +15,7 @@ public class Estatico {
     
     private static Caixa caixa;
     private static Boolean editarCaixa;
+    private static String ramalSelecionado;
     private static List<Caixa> listaCaixas = new ArrayList<>();
     private static int caixasOn;
     private static int caixasOff;
@@ -186,7 +187,13 @@ public class Estatico {
     public static void setNovoRamal(Boolean novoRamal) {
         Estatico.novoRamal = novoRamal;
     }
-    
-    
+
+    public static String getRamalSelecionado() {
+        return ramalSelecionado;
+    }
+
+    public static void setRamalSelecionado(String ramalSelecionado) {
+        Estatico.ramalSelecionado = ramalSelecionado;
+    }
     
 }

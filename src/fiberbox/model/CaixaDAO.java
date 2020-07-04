@@ -63,6 +63,7 @@ public class CaixaDAO {
                     + "usuario6 VARCHAR(50),"
                     + "usuario7 VARCHAR(50),"
                     + "usuario8 VARCHAR(50),"
+                    + "ramal VARCHAR,"
                     + "x DOUBLE,"
                     + "y DOUBLE"
                     + ")");
@@ -85,6 +86,35 @@ public class CaixaDAO {
         
     }  
     
+    public boolean alterarTabela(){
+        
+        System.out.println("** ALTERAR TABELA **");
+        
+        boolean retorno = false;
+        
+        try {
+            
+            stmt = con.prepareStatement("UPDATE caixa SET ramal = ?;");
+            stmt.setString(1, "Cândido Mendes - MA");
+            
+            stmt.execute();
+            
+            retorno = true;
+            
+        } catch (SQLException e) {
+            
+            System.err.println("Erro ao alterar a tabela: " + e.getMessage());
+            
+        }finally{
+            
+            ConexaoSQLite.closeConnection(con, stmt);
+            
+        }
+        
+        return retorno;
+        
+    }  
+    
     public boolean inserir(Caixa caixa){
         
         System.out.println("** CRIAR CAIXA **");
@@ -96,9 +126,9 @@ public class CaixaDAO {
             stmt = con.prepareStatement("INSERT INTO"
                     + " caixa "
                     + "(codigo, endereco, usuario1, usuario2, usuario3,"
-                    + " usuario4, usuario5, usuario6, usuario7, usuario8, x, y) "
+                    + " usuario4, usuario5, usuario6, usuario7, usuario8, ramal, x, y) "
                     + "VALUES "
-                    + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+                    + "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
             
             stmt.setString(1, caixa.getCodigo());
             stmt.setString(2, caixa.getEndereco());
@@ -110,8 +140,9 @@ public class CaixaDAO {
             stmt.setString(8, caixa.getUsuario6());
             stmt.setString(9, caixa.getUsuario7());
             stmt.setString(10, caixa.getUsuario8());
-            stmt.setDouble(11, caixa.getX());
-            stmt.setDouble(12, caixa.getY());
+            stmt.setString(11, caixa.getRamal());
+            stmt.setDouble(12, caixa.getX());
+            stmt.setDouble(13, caixa.getY());
             
             stmt.executeUpdate();
             
@@ -146,7 +177,7 @@ public class CaixaDAO {
                     + " SET "
                     + "codigo = ?, endereco = ?, usuario1 = ?, usuario2 = ?, "
                     + "usuario3 = ?, usuario4 = ?, usuario5 = ?, usuario6 = ?,"
-                    + "usuario7 = ?, usuario8 = ?, x = ?, y = ? "
+                    + "usuario7 = ?, usuario8 = ?, ramal = ?, x = ?, y = ? "
                     + "WHERE codigo = ?");
             
              stmt.setString(1, caixa.getCodigo());
@@ -159,9 +190,10 @@ public class CaixaDAO {
             stmt.setString(8, caixa.getUsuario6());
             stmt.setString(9, caixa.getUsuario7());
             stmt.setString(10, caixa.getUsuario8());
-            stmt.setDouble(11, caixa.getX());
-            stmt.setDouble(12, caixa.getY());
-            stmt.setString(13, codigoAnterior);
+            stmt.setString(11, caixa.getRamal());
+            stmt.setDouble(12, caixa.getX());
+            stmt.setDouble(13, caixa.getY());
+            stmt.setString(14, codigoAnterior);
             
             stmt.executeUpdate();
             
@@ -209,6 +241,7 @@ public class CaixaDAO {
                         rs.getString("usuario6"),
                         rs.getString("usuario7"),
                         rs.getString("usuario8"),
+                        rs.getString("ramal"),
                         rs.getDouble(("x")),
                         rs.getDouble(("y"))
                     );
@@ -261,6 +294,7 @@ public class CaixaDAO {
                 c.setUsuario6(rs.getString("usuario6"));
                 c.setUsuario7(rs.getString("usuario7"));
                 c.setUsuario8(rs.getString("usuario8"));
+                c.setUsuario8(rs.getString("ramal"));
                 c.setX(rs.getDouble("x"));
                 c.setY(rs.getDouble("y"));
                 
@@ -309,6 +343,7 @@ public class CaixaDAO {
                 c.setUsuario6(rs.getString("usuario6"));
                 c.setUsuario7(rs.getString("usuario7"));
                 c.setUsuario8(rs.getString("usuario8"));
+                c.setUsuario8(rs.getString("ramal"));
                 c.setX(rs.getDouble("x"));
                 c.setY(rs.getDouble("y"));
                 
@@ -358,6 +393,8 @@ public class CaixaDAO {
                     + search 
                     +"%' OR usuario8 LIKE '%"
                     + search 
+                    +"%' OR ramal LIKE '%"
+                    + search 
                     +"%' OR x LIKE '%"
                     + search 
                     +"%' OR y LIKE '%"
@@ -379,6 +416,7 @@ public class CaixaDAO {
                         rs.getString("usuario6"),
                         rs.getString("usuario7"),
                         rs.getString("usuario8"),
+                        rs.getString("ramal"),
                         rs.getDouble(("x")),
                         rs.getDouble(("y"))
                 );
